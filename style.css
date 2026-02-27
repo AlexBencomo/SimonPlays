@@ -235,12 +235,18 @@ input[type="range"]::-moz-range-track {
   stroke: none;
   cursor: pointer;
   pointer-events: all;
+  transform-box: fill-box;
+  transform-origin: center;
+  transform: rotate(180deg);
 }
 .tongue-hit {
   fill: transparent;
   stroke: none;
   cursor: pointer;
   pointer-events: all;
+  transform-box: fill-box;
+  transform-origin: center;
+  transform: rotate(180deg);
 }
 
 /* Strike glow animation — semi-transparent overlay on the image */
