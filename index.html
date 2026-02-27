@@ -117,64 +117,64 @@
 
           <!--
             Tongue hit areas mapped to drum-face.png (Nano Banana Pro).
-            Analysis: all 8 tongues at ~128 SVG units from center,
-            radial span 82..175, angular width ~28°.
+            Centroid: 128 SVG units from center. Sizes scaled by pitch:
+            A3=1.25x (largest) → D5=0.80x (smallest).
             Hit area: rounded-top rect covering the full tongue metal.
             Tongue path: slightly smaller, receives glow animation.
           -->
-          <!-- Tongue 0: D5 (top-center, 0°) -->
+          <!-- Tongue 0: D5 (top-center, 0°) — smallest (0.80x) -->
           <g data-tongue-id="0" transform="translate(250,250) rotate(0) translate(0,-128)">
-            <path class="tongue-hit" d="M-34,48 L-34,-14 A34,34 0 0 1 34,-14 L34,48 Z"/>
-            <path id="tongue-0" class="tongue" d="M-27,42 L-27,-8 A27,28 0 0 1 27,-8 L27,42 Z"/>
+            <path class="tongue-hit" d="M-27,38 L-27,-11 A27,27 0 0 1 27,-11 L27,38 Z"/>
+            <path id="tongue-0" class="tongue" d="M-22,34 L-22,-6 A22,22 0 0 1 22,-6 L22,34 Z"/>
             <text class="tongue-label" transform="rotate(0)" x="0" y="4">D5</text>
-            <text class="tongue-key-hint" transform="rotate(0)" x="0" y="22">8</text>
+            <text class="tongue-key-hint" transform="rotate(0)" x="0" y="20">8</text>
           </g>
-          <!-- Tongue 1: C5 (top-right, 45°) -->
+          <!-- Tongue 1: C5 (top-right, 45°) — small (0.88x) -->
           <g data-tongue-id="1" transform="translate(250,250) rotate(45) translate(0,-128)">
-            <path class="tongue-hit" d="M-34,48 L-34,-14 A34,34 0 0 1 34,-14 L34,48 Z"/>
-            <path id="tongue-1" class="tongue" d="M-27,42 L-27,-8 A27,28 0 0 1 27,-8 L27,42 Z"/>
+            <path class="tongue-hit" d="M-30,42 L-30,-12 A30,30 0 0 1 30,-12 L30,42 Z"/>
+            <path id="tongue-1" class="tongue" d="M-24,37 L-24,-7 A24,25 0 0 1 24,-7 L24,37 Z"/>
             <text class="tongue-label" transform="rotate(-45)" x="0" y="4">C5</text>
-            <text class="tongue-key-hint" transform="rotate(-45)" x="0" y="22">9</text>
+            <text class="tongue-key-hint" transform="rotate(-45)" x="0" y="21">9</text>
           </g>
-          <!-- Tongue 2: G4 (right, 90°) -->
+          <!-- Tongue 2: G4 (right, 90°) — medium (1.04x) -->
           <g data-tongue-id="2" transform="translate(250,250) rotate(90) translate(0,-128)">
-            <path class="tongue-hit" d="M-34,48 L-34,-14 A34,34 0 0 1 34,-14 L34,48 Z"/>
-            <path id="tongue-2" class="tongue" d="M-27,42 L-27,-8 A27,28 0 0 1 27,-8 L27,42 Z"/>
+            <path class="tongue-hit" d="M-35,50 L-35,-15 A35,35 0 0 1 35,-15 L35,50 Z"/>
+            <path id="tongue-2" class="tongue" d="M-28,44 L-28,-8 A28,29 0 0 1 28,-8 L28,44 Z"/>
             <text class="tongue-label" transform="rotate(-90)" x="0" y="4">G4</text>
             <text class="tongue-key-hint" transform="rotate(-90)" x="0" y="22">6</text>
           </g>
-          <!-- Tongue 3: D4 (bottom-right, 135°) -->
+          <!-- Tongue 3: D4 (bottom-right, 135°) — large (1.16x) -->
           <g data-tongue-id="3" transform="translate(250,250) rotate(135) translate(0,-128)">
-            <path class="tongue-hit" d="M-34,48 L-34,-14 A34,34 0 0 1 34,-14 L34,48 Z"/>
-            <path id="tongue-3" class="tongue" d="M-27,42 L-27,-8 A27,28 0 0 1 27,-8 L27,42 Z"/>
+            <path class="tongue-hit" d="M-39,56 L-39,-16 A39,39 0 0 1 39,-16 L39,56 Z"/>
+            <path id="tongue-3" class="tongue" d="M-31,49 L-31,-9 A31,32 0 0 1 31,-9 L31,49 Z"/>
             <text class="tongue-label" transform="rotate(-135)" x="0" y="4">D4</text>
             <text class="tongue-key-hint" transform="rotate(-135)" x="0" y="22">3</text>
           </g>
-          <!-- Tongue 4: A3 (bottom-center, 180°) -->
+          <!-- Tongue 4: A3 (bottom-center, 180°) — largest (1.25x) -->
           <g data-tongue-id="4" transform="translate(250,250) rotate(180) translate(0,-128)">
-            <path class="tongue-hit" d="M-34,48 L-34,-14 A34,34 0 0 1 34,-14 L34,48 Z"/>
-            <path id="tongue-4" class="tongue" d="M-27,42 L-27,-8 A27,28 0 0 1 27,-8 L27,42 Z"/>
+            <path class="tongue-hit" d="M-43,60 L-43,-18 A43,43 0 0 1 43,-18 L43,60 Z"/>
+            <path id="tongue-4" class="tongue" d="M-34,53 L-34,-10 A34,35 0 0 1 34,-10 L34,53 Z"/>
             <text class="tongue-label" transform="rotate(-180)" x="0" y="4">A3</text>
             <text class="tongue-key-hint" transform="rotate(-180)" x="0" y="22">2</text>
           </g>
-          <!-- Tongue 5: C4 (bottom-left, 225°) -->
+          <!-- Tongue 5: C4 (bottom-left, 225°) — large (1.20x) -->
           <g data-tongue-id="5" transform="translate(250,250) rotate(225) translate(0,-128)">
-            <path class="tongue-hit" d="M-34,48 L-34,-14 A34,34 0 0 1 34,-14 L34,48 Z"/>
-            <path id="tongue-5" class="tongue" d="M-27,42 L-27,-8 A27,28 0 0 1 27,-8 L27,42 Z"/>
+            <path class="tongue-hit" d="M-41,58 L-41,-17 A41,41 0 0 1 41,-17 L41,58 Z"/>
+            <path id="tongue-5" class="tongue" d="M-32,50 L-32,-10 A32,34 0 0 1 32,-10 L32,50 Z"/>
             <text class="tongue-label" transform="rotate(-225)" x="0" y="4">C4</text>
             <text class="tongue-key-hint" transform="rotate(-225)" x="0" y="22">1</text>
           </g>
-          <!-- Tongue 6: E4 (left, 270°) -->
+          <!-- Tongue 6: E4 (left, 270°) — medium-large (1.12x) -->
           <g data-tongue-id="6" transform="translate(250,250) rotate(270) translate(0,-128)">
-            <path class="tongue-hit" d="M-34,48 L-34,-14 A34,34 0 0 1 34,-14 L34,48 Z"/>
-            <path id="tongue-6" class="tongue" d="M-27,42 L-27,-8 A27,28 0 0 1 27,-8 L27,42 Z"/>
+            <path class="tongue-hit" d="M-38,54 L-38,-16 A38,38 0 0 1 38,-16 L38,54 Z"/>
+            <path id="tongue-6" class="tongue" d="M-30,47 L-30,-9 A30,31 0 0 1 30,-9 L30,47 Z"/>
             <text class="tongue-label" transform="rotate(-270)" x="0" y="4">E4</text>
             <text class="tongue-key-hint" transform="rotate(-270)" x="0" y="22">4</text>
           </g>
-          <!-- Tongue 7: A4 (top-left, 315°) -->
+          <!-- Tongue 7: A4 (top-left, 315°) — medium-small (0.98x) -->
           <g data-tongue-id="7" transform="translate(250,250) rotate(315) translate(0,-128)">
-            <path class="tongue-hit" d="M-34,48 L-34,-14 A34,34 0 0 1 34,-14 L34,48 Z"/>
-            <path id="tongue-7" class="tongue" d="M-27,42 L-27,-8 A27,28 0 0 1 27,-8 L27,42 Z"/>
+            <path class="tongue-hit" d="M-33,47 L-33,-14 A33,33 0 0 1 33,-14 L33,47 Z"/>
+            <path id="tongue-7" class="tongue" d="M-26,41 L-26,-8 A26,27 0 0 1 26,-8 L26,41 Z"/>
             <text class="tongue-label" transform="rotate(-315)" x="0" y="4">A4</text>
             <text class="tongue-key-hint" transform="rotate(-315)" x="0" y="22">7</text>
           </g>
