@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Steel Tongue Drum</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Startup overlay -->
+  <div id="overlay" class="overlay">
+    <h1>Steel Tongue Drum</h1>
+    <p>Tap anywhere to begin</p>
+  </div>
+
+  <!-- Mobile panel toggle -->
+  <button class="panel-toggle" id="panel-toggle" aria-label="Toggle sound panel">
+    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+      <line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/>
+      <circle cx="8" cy="6" r="2" fill="currentColor"/><circle cx="16" cy="12" r="2" fill="currentColor"/><circle cx="10" cy="18" r="2" fill="currentColor"/>
+    </svg>
+  </button>
+
+  <div class="app-layout">
+
+    <!-- Control Panel -->
+    <aside class="panel" id="panel">
+      <div class="panel-header">
+        <h2>Sound Design</h2>
+        <button class="panel-close" id="panel-close">&times;</button>
+      </div>
+
+      <!-- Preset -->
+      <div class="panel-section">
+        <h3>Preset</h3>
+        <select id="preset-select">
+          <option value="default" selected>Default</option>
+          <option value="handpan">Handpan</option>
+          <option value="bell">Bell</option>
+          <option value="marimba">Marimba</option>
+          <option value="deep">Deep &amp; Warm</option>
+          <option value="custom" disabled hidden>Custom</option>
+        </select>
+      </div>
+
+      <!-- Tone -->
+      <div class="panel-section">
+        <h3>Tone</h3>
+        <div class="ctrl">
+          <label><span>Harmonics</span><span class="ctrl-val" id="val-harmonicity">3.01</span></label>
+          <input type="range" id="ctrl-harmonicity" min="0.5" max="8" step="0.01" value="3.01">
+        </div>
+        <div class="ctrl">
+          <label><span>Brightness</span><span class="ctrl-val" id="val-modulationIndex">1.2</span></label>
+          <input type="range" id="ctrl-modulationIndex" min="0" max="5" step="0.1" value="1.2">
+        </div>
+        <div class="ctrl">
+          <label><span>Bloom</span><span class="ctrl-val" id="val-bloomCents">12 ct</span></label>
+          <input type="range" id="ctrl-bloomCents" min="0" max="50" step="1" value="12">
+        </div>
+        <div class="ctrl">
+          <label><span>Attack</span><span class="ctrl-val" id="val-attack">25 ms</span></label>
+          <input type="range" id="ctrl-attack" min="1" max="150" step="1" value="25">
+        </div>
+      </div>
+
+      <!-- Envelope -->
+      <div class="panel-section">
+        <h3>Envelope</h3>
+        <div class="ctrl">
+          <label><span>Sustain</span><span class="ctrl-val" id="val-decayScale">1.0x</span></label>
+          <input type="range" id="ctrl-decayScale" min="0.2" max="3" step="0.1" value="1.0">
+        </div>
+        <div class="ctrl">
+          <label><span>Harmonic Fade</span><span class="ctrl-val" id="val-modDecayRatio">0.30</span></label>
+          <input type="range" id="ctrl-modDecayRatio" min="0.05" max="1" step="0.05" value="0.3">
+        </div>
+      </div>
+
+      <!-- Space -->
+      <div class="panel-section">
+        <h3>Space</h3>
+        <div class="ctrl">
+          <label><span>Reverb</span><span class="ctrl-val" id="val-reverbWet">45%</span></label>
+          <input type="range" id="ctrl-reverbWet" min="0" max="100" step="1" value="45">
+        </div>
+        <div class="ctrl">
+          <label><span>Room Size</span><span class="ctrl-val" id="val-reverbDecay">4.0s</span></label>
+          <input type="range" id="ctrl-reverbDecay" min="0.5" max="10" step="0.1" value="4">
+        </div>
+      </div>
+
+      <!-- Mix -->
+      <div class="panel-section">
+        <h3>Mix</h3>
+        <div class="ctrl">
+          <label><span>Sub Bass</span><span class="ctrl-val" id="val-subLevel">-14 dB</span></label>
+          <input type="range" id="ctrl-subLevel" min="-30" max="0" step="1" value="-14">
+        </div>
+        <div class="ctrl">
+          <label><span>Volume</span><span class="ctrl-val" id="val-volume">0 dB</span></label>
+          <input type="range" id="ctrl-volume" min="-30" max="6" step="1" value="0">
+        </div>
+      </div>
+    </aside>
+
+    <!-- Scrim for mobile drawer -->
+    <div class="panel-scrim" id="panel-scrim"></div>
+
+    <!-- Main stage -->
+    <main class="stage">
+      <div class="drum-container">
+        <svg class="drum-svg" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+          <!-- Drum face image -->
+          <image href="drum-face.png" x="0" y="0" width="500" height="500" preserveAspectRatio="xMidYMid meet"/>
+
+          <!--
+            Tongue hit areas mapped to drum-face.png (Nano Banana Pro).
+            Analysis: all 8 tongues at ~128 SVG units from center,
+            radial span 82..175, angular width ~28°.
+            Hit area: rounded-top rect covering the full tongue metal.
+            Tongue path: slightly smaller, receives glow animation.
+          -->
+          <!-- Tongue 0: D5 (top-center, 0°) -->
+          <g data-tongue-id="0" transform="translate(250,250) rotate(0) translate(0,-128)">
+            <path class="tongue-hit" d="M-34,48 L-34,-14 A34,34 0 0 1 34,-14 L34,48 Z"/>
+            <path id="tongue-0" class="tongue" d="M-27,42 L-27,-8 A27,28 0 0 1 27,-8 L27,42 Z"/>
+            <text class="tongue-label" transform="rotate(0)" x="0" y="4">D5</text>
+            <text class="tongue-key-hint" transform="rotate(0)" x="0" y="22">8</text>
+          </g>
+          <!-- Tongue 1: C5 (top-right, 45°) -->
+          <g data-tongue-id="1" transform="translate(250,250) rotate(45) translate(0,-128)">
+            <path class="tongue-hit" d="M-34,48 L-34,-14 A34,34 0 0 1 34,-14 L34,48 Z"/>
+            <path id="tongue-1" class="tongue" d="M-27,42 L-27,-8 A27,28 0 0 1 27,-8 L27,42 Z"/>
+            <text class="tongue-label" transform="rotate(-45)" x="0" y="4">C5</text>
+            <text class="tongue-key-hint" transform="rotate(-45)" x="0" y="22">9</text>
+          </g>
+          <!-- Tongue 2: G4 (right, 90°) -->
+          <g data-tongue-id="2" transform="translate(250,250) rotate(90) translate(0,-128)">
+            <path class="tongue-hit" d="M-34,48 L-34,-14 A34,34 0 0 1 34,-14 L34,48 Z"/>
+            <path id="tongue-2" class="tongue" d="M-27,42 L-27,-8 A27,28 0 0 1 27,-8 L27,42 Z"/>
+            <text class="tongue-label" transform="rotate(-90)" x="0" y="4">G4</text>
+            <text class="tongue-key-hint" transform="rotate(-90)" x="0" y="22">6</text>
+          </g>
+          <!-- Tongue 3: D4 (bottom-right, 135°) -->
+          <g data-tongue-id="3" transform="translate(250,250) rotate(135) translate(0,-128)">
+            <path class="tongue-hit" d="M-34,48 L-34,-14 A34,34 0 0 1 34,-14 L34,48 Z"/>
+            <path id="tongue-3" class="tongue" d="M-27,42 L-27,-8 A27,28 0 0 1 27,-8 L27,42 Z"/>
+            <text class="tongue-label" transform="rotate(-135)" x="0" y="4">D4</text>
+            <text class="tongue-key-hint" transform="rotate(-135)" x="0" y="22">3</text>
+          </g>
+          <!-- Tongue 4: A3 (bottom-center, 180°) -->
+          <g data-tongue-id="4" transform="translate(250,250) rotate(180) translate(0,-128)">
+            <path class="tongue-hit" d="M-34,48 L-34,-14 A34,34 0 0 1 34,-14 L34,48 Z"/>
+            <path id="tongue-4" class="tongue" d="M-27,42 L-27,-8 A27,28 0 0 1 27,-8 L27,42 Z"/>
+            <text class="tongue-label" transform="rotate(-180)" x="0" y="4">A3</text>
+            <text class="tongue-key-hint" transform="rotate(-180)" x="0" y="22">2</text>
+          </g>
+          <!-- Tongue 5: C4 (bottom-left, 225°) -->
+          <g data-tongue-id="5" transform="translate(250,250) rotate(225) translate(0,-128)">
+            <path class="tongue-hit" d="M-34,48 L-34,-14 A34,34 0 0 1 34,-14 L34,48 Z"/>
+            <path id="tongue-5" class="tongue" d="M-27,42 L-27,-8 A27,28 0 0 1 27,-8 L27,42 Z"/>
+            <text class="tongue-label" transform="rotate(-225)" x="0" y="4">C4</text>
+            <text class="tongue-key-hint" transform="rotate(-225)" x="0" y="22">1</text>
+          </g>
+          <!-- Tongue 6: E4 (left, 270°) -->
+          <g data-tongue-id="6" transform="translate(250,250) rotate(270) translate(0,-128)">
+            <path class="tongue-hit" d="M-34,48 L-34,-14 A34,34 0 0 1 34,-14 L34,48 Z"/>
+            <path id="tongue-6" class="tongue" d="M-27,42 L-27,-8 A27,28 0 0 1 27,-8 L27,42 Z"/>
+            <text class="tongue-label" transform="rotate(-270)" x="0" y="4">E4</text>
+            <text class="tongue-key-hint" transform="rotate(-270)" x="0" y="22">4</text>
+          </g>
+          <!-- Tongue 7: A4 (top-left, 315°) -->
+          <g data-tongue-id="7" transform="translate(250,250) rotate(315) translate(0,-128)">
+            <path class="tongue-hit" d="M-34,48 L-34,-14 A34,34 0 0 1 34,-14 L34,48 Z"/>
+            <path id="tongue-7" class="tongue" d="M-27,42 L-27,-8 A27,28 0 0 1 27,-8 L27,42 Z"/>
+            <text class="tongue-label" transform="rotate(-315)" x="0" y="4">A4</text>
+            <text class="tongue-key-hint" transform="rotate(-315)" x="0" y="22">7</text>
+          </g>
+        </svg>
+      </div>
+
+      <div class="key-bar">
+        <kbd>7</kbd> A4 &nbsp;
+        <kbd>8</kbd> D5 &nbsp;
+        <kbd>9</kbd> C5 &nbsp;&nbsp;|&nbsp;&nbsp;
+        <kbd>4</kbd> E4 &nbsp;
+        <kbd>6</kbd> G4 &nbsp;&nbsp;|&nbsp;&nbsp;
+        <kbd>1</kbd> C4 &nbsp;
+        <kbd>2</kbd> A3 &nbsp;
+        <kbd>3</kbd> D4
+      </div>
+    </main>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

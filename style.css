@@ -1,0 +1,306 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #0c1410;
+  min-height: 100vh;
+  overflow: hidden;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  color: #a0b8a0;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+  touch-action: manipulation;
+}
+
+/* ── Startup overlay ────────────────────────────────────────────── */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(12, 20, 16, 0.95);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+  cursor: pointer;
+  transition: opacity 0.5s ease-out;
+}
+.overlay.hidden { opacity: 0; pointer-events: none; }
+.overlay h1 { font-size: 2rem; color: #6aaa6a; margin-bottom: 1rem; letter-spacing: 0.05em; }
+.overlay p { font-size: 1.1rem; color: #7a9a7a; animation: pulse 2s ease-in-out infinite; }
+@keyframes pulse { 0%,100% { opacity: 0.6; } 50% { opacity: 1; } }
+
+/* ── Layout ─────────────────────────────────────────────────────── */
+.app-layout {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+}
+
+.stage {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 1rem;
+}
+
+/* ── Control Panel ──────────────────────────────────────────────── */
+.panel {
+  width: 250px;
+  min-width: 250px;
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: #0a1a10;
+  border-right: 1px solid #1a3020;
+  padding: 0.8rem 1rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  z-index: 50;
+  touch-action: auto;
+  -webkit-user-select: none;
+  user-select: none;
+  scrollbar-width: thin;
+  scrollbar-color: #1a3a20 transparent;
+}
+.panel::-webkit-scrollbar { width: 5px; }
+.panel::-webkit-scrollbar-track { background: transparent; }
+.panel::-webkit-scrollbar-thumb { background: #1a3a20; border-radius: 3px; }
+
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.4rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #1a3020;
+}
+.panel-header h2 {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #6aaa6a;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.panel-close {
+  display: none;
+  background: none;
+  border: none;
+  color: #5a7a5a;
+  font-size: 1.3rem;
+  cursor: pointer;
+  padding: 0 4px;
+  line-height: 1;
+}
+.panel-close:hover { color: #8aba8a; }
+
+/* Section groups */
+.panel-section { margin-bottom: 0.3rem; }
+.panel-section h3 {
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: #3a6a40;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-bottom: 0.35rem;
+  padding-top: 0.45rem;
+  border-top: 1px solid #142418;
+}
+.panel-section:first-of-type h3 { border-top: none; padding-top: 0; }
+
+/* Individual control */
+.ctrl { margin-bottom: 0.5rem; }
+.ctrl label {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 3px;
+}
+.ctrl label span:first-child {
+  font-size: 0.72rem;
+  color: #8aaa8a;
+}
+.ctrl-val {
+  font-size: 0.68rem;
+  color: #5a8a5a;
+  font-variant-numeric: tabular-nums;
+  min-width: 3.2em;
+  text-align: right;
+}
+
+/* Preset select */
+.panel-section select {
+  width: 100%;
+  background: #121e16;
+  color: #8aaa8a;
+  border: 1px solid #1a3020;
+  border-radius: 4px;
+  padding: 5px 8px;
+  font-size: 0.78rem;
+  font-family: inherit;
+  cursor: pointer;
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%235a7a5a'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+}
+.panel-section select:focus { border-color: #2a5030; }
+
+/* Range slider */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 4px;
+  background: #162218;
+  border-radius: 2px;
+  outline: none;
+  cursor: pointer;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #3a8a44;
+  border: 2px solid #285a2e;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+input[type="range"]::-webkit-slider-thumb:hover { background: #4aaa54; }
+input[type="range"]::-webkit-slider-thumb:active { background: #5abb64; }
+input[type="range"]::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #3a8a44;
+  border: 2px solid #285a2e;
+  cursor: pointer;
+}
+input[type="range"]::-moz-range-track {
+  height: 4px;
+  background: #162218;
+  border-radius: 2px;
+  border: none;
+}
+
+/* ── Mobile panel toggle ────────────────────────────────────────── */
+.panel-toggle {
+  display: none;
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 60;
+  background: #0f1e14;
+  border: 1px solid #1a3020;
+  border-radius: 8px;
+  color: #6a9a6a;
+  padding: 8px;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+}
+.panel-toggle:hover { background: #142818; }
+
+.panel-scrim {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 40;
+}
+
+/* ── Drum ───────────────────────────────────────────────────────── */
+.drum-container {
+  width: 100%;
+  max-width: min(90vh, 550px);
+  aspect-ratio: 1;
+}
+.drum-svg { width: 100%; height: 100%; display: block; }
+
+.tongue {
+  fill: transparent;
+  stroke: none;
+  cursor: pointer;
+  pointer-events: all;
+}
+.tongue-hit {
+  fill: transparent;
+  stroke: none;
+  cursor: pointer;
+  pointer-events: all;
+}
+
+/* Strike glow animation — semi-transparent overlay on the image */
+@keyframes tongue-strike {
+  0%  { fill: rgba(120, 240, 120, 0.5); filter: drop-shadow(0 0 18px rgba(100,255,100,0.8)); }
+  5%  { fill: rgba(100, 220, 100, 0.4); filter: drop-shadow(0 0 14px rgba(100,255,100,0.6)); }
+  25% { fill: rgba(70, 180, 80, 0.2); filter: drop-shadow(0 0 8px rgba(100,255,100,0.3)); }
+  100%{ fill: transparent; filter: drop-shadow(0 0 0px rgba(100,255,100,0)); }
+}
+.tongue--active {
+  animation: tongue-strike 1.6s cubic-bezier(0.12, 0, 0.39, 0) forwards;
+}
+
+/* Labels — subtle overlay on drum image */
+.tongue-label {
+  fill: rgba(200, 230, 200, 0.7); font-size: 12px; font-weight: 600;
+  text-anchor: middle; pointer-events: none; dominant-baseline: central;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.6);
+}
+.tongue-key-hint {
+  fill: rgba(140, 180, 140, 0.5); font-size: 9px;
+  text-anchor: middle; pointer-events: none; dominant-baseline: central;
+}
+
+/* Branding provided by drum-face.png image */
+
+/* Keyboard hint bar */
+.key-bar {
+  margin-top: 1.2rem; text-align: center;
+  font-size: 0.8rem; color: #4a6a4a; line-height: 1.6;
+}
+.key-bar kbd {
+  display: inline-block; background: #1a2a1a; border: 1px solid #2a4a2a;
+  border-radius: 4px; padding: 2px 6px; font-family: inherit;
+  font-size: 0.75rem; color: #6a9a6a; margin: 0 1px;
+}
+
+/* ── Responsive ─────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .panel {
+    position: fixed;
+    left: 0;
+    top: 0;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    box-shadow: none;
+  }
+  .panel.open {
+    transform: translateX(0);
+    box-shadow: 4px 0 20px rgba(0,0,0,0.4);
+  }
+  .panel-toggle { display: flex; }
+  .panel-close { display: block; }
+  .panel-scrim.open { display: block; }
+
+  .drum-container { max-width: min(90vw, 85vh, 500px); }
+}
+@media (max-width: 480px) {
+  .tongue-key-hint { display: none; }
+  .tongue-label { font-size: 11px; }
+  .key-bar { display: none; }
+  .overlay h1 { font-size: 1.5rem; }
+}
