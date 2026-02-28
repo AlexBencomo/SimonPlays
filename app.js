@@ -1,13 +1,13 @@
 // ── Tongue layout ───────────────────────────────────────────────────
 const TONGUES = [
-  { id: 0, note: 'D5', freq: 587.33, angle: 0,   key: '8' },
-  { id: 1, note: 'C5', freq: 523.25, angle: 45,  key: '9' },
-  { id: 2, note: 'G4', freq: 392.00, angle: 90,  key: '6' },
-  { id: 3, note: 'D4', freq: 293.66, angle: 135, key: '3' },
-  { id: 4, note: 'A3', freq: 220.00, angle: 180, key: '2' },
-  { id: 5, note: 'C4', freq: 261.63, angle: 225, key: '1' },
-  { id: 6, note: 'E4', freq: 329.63, angle: 270, key: '4' },
-  { id: 7, note: 'A4', freq: 440.00, angle: 315, key: '7' },
+  { id: 0, note: 'D5',  freq: 576.65, angle: 0,   key: '8' },
+  { id: 1, note: 'B4',  freq: 484.90, angle: 45,  key: '9' },
+  { id: 2, note: 'F#4', freq: 363.27, angle: 90,  key: '6' },
+  { id: 3, note: 'D4',  freq: 288.33, angle: 135, key: '3' },
+  { id: 4, note: 'A3',  freq: 216.00, angle: 180, key: '2' },
+  { id: 5, note: 'B3',  freq: 242.45, angle: 225, key: '1' },
+  { id: 6, note: 'E4',  freq: 323.63, angle: 270, key: '4' },
+  { id: 7, note: 'A4',  freq: 432.00, angle: 315, key: '7' },
 ];
 
 const KEY_MAP = {};
@@ -19,9 +19,9 @@ TONGUES.forEach(t => {
 // ── Presets (values = slider values, not audio values) ──────────────
 const PRESETS = {
   default: {
-    harmonicity: 3.01, modulationIndex: 1.2, bloomCents: 12,
-    attack: 25, decayScale: 1.0, modDecayRatio: 0.3,
-    reverbWet: 45, reverbDecay: 4, subLevel: -14, volume: 0,
+    harmonicity: 2.6, modulationIndex: 0.9, bloomCents: 8,
+    attack: 35, decayScale: 0.8, modDecayRatio: 0.22,
+    reverbWet: 50, reverbDecay: 3.2, subLevel: -20, volume: 0,
   },
   handpan: {
     harmonicity: 5.1, modulationIndex: 0.6, bloomCents: 8,
@@ -42,6 +42,21 @@ const PRESETS = {
     harmonicity: 2.5, modulationIndex: 1.6, bloomCents: 15,
     attack: 45, decayScale: 1.6, modDecayRatio: 0.22,
     reverbWet: 65, reverbDecay: 6.5, subLevel: -6, volume: -2,
+  },
+};
+
+// ── Songs ────────────────────────────────────────────────────────────
+const SONGS = {
+  twinkle: {
+    title: 'Twinkle Twinkle Little Star',
+    lines: [
+      { lyric: 'Twinkle, twinkle, little star',  notes: [3,3,7,7,1,1,7] },
+      { lyric: 'How I wonder what you are',       notes: [2,2,6,6,3] },
+      { lyric: 'Up above the world so high',      notes: [7,7,2,2,6] },
+      { lyric: 'Like a diamond in the sky',        notes: [7,7,2,2,6] },
+      { lyric: 'Twinkle, twinkle, little star',   notes: [3,3,7,7,1,1,7] },
+      { lyric: 'How I wonder what you are',        notes: [2,2,6,6,3] },
+    ],
   },
 };
 
@@ -69,15 +84,15 @@ class AudioEngine {
 
     // Current audio-domain params (set via setParam)
     this.params = {
-      harmonicity: 3.01,
-      modulationIndex: 1.2,
-      bloomCents: 12,
-      attack: 0.025,
-      decayScale: 1.0,
-      modDecayRatio: 0.3,
-      reverbWet: 0.45,
-      reverbDecay: 4,
-      subLevel: -14,
+      harmonicity: 2.6,
+      modulationIndex: 0.9,
+      bloomCents: 8,
+      attack: 0.035,
+      decayScale: 0.8,
+      modDecayRatio: 0.22,
+      reverbWet: 0.50,
+      reverbDecay: 3.2,
+      subLevel: -20,
       volume: 0,
     };
   }
@@ -340,16 +355,227 @@ class ControlPanel {
   }
 }
 
+// ── LearnEngine ──────────────────────────────────────────────────────
+class LearnEngine {
+  constructor(visual) {
+    this.visual = visual;
+    this.state = 'idle'; // idle | playing | complete
+    this.isActive = false;
+    this.notes = [];
+    this.lineMap = [];   // maps flat note index → line index
+    this.cursor = 0;
+
+    // DOM refs
+    this.startBtn = document.getElementById('learn-start');
+    this.resetBtn = document.getElementById('learn-reset');
+    this.songSelect = document.getElementById('song-select');
+    this.progressSection = document.getElementById('learn-progress-section');
+    this.progressText = document.getElementById('learn-progress-text');
+    this.progressFill = document.getElementById('learn-progress-fill');
+    this.noteSection = document.getElementById('learn-note-section');
+    this.noteDisplay = document.getElementById('learn-note-display');
+    this.lyricsSection = document.getElementById('learn-lyrics-section');
+    this.lyricsEl = document.getElementById('learn-lyrics');
+
+    this.startBtn.addEventListener('click', () => this._start());
+    this.resetBtn.addEventListener('click', () => this._reset());
+    this._bindPanelToggle();
+  }
+
+  _start() {
+    const songKey = this.songSelect.value;
+    const song = SONGS[songKey];
+    if (!song) return;
+
+    // Flatten notes + build line map
+    this.notes = [];
+    this.lineMap = [];
+    song.lines.forEach((line, li) => {
+      line.notes.forEach(id => {
+        this.lineMap.push(li);
+        this.notes.push(id);
+      });
+    });
+
+    this.cursor = 0;
+    this.state = 'playing';
+    this.isActive = true;
+
+    this.startBtn.disabled = true;
+    this.resetBtn.disabled = false;
+
+    // Render lyrics
+    this.lyricsEl.innerHTML = song.lines
+      .map((line, i) => `<div class="lyric-line" data-line="${i}">${line.lyric}</div>`)
+      .join('');
+
+    // Show sections
+    this.progressSection.style.display = '';
+    this.noteSection.style.display = '';
+    this.lyricsSection.style.display = '';
+
+    this._updateDisplay();
+    this._showHint();
+  }
+
+  _reset() {
+    this._clearHint();
+    this.state = 'idle';
+    this.isActive = false;
+    this.cursor = 0;
+    this.notes = [];
+
+    this.startBtn.disabled = false;
+    this.resetBtn.disabled = true;
+
+    this.progressSection.style.display = 'none';
+    this.noteSection.style.display = 'none';
+    this.lyricsSection.style.display = 'none';
+    this.noteDisplay.innerHTML = '—';
+    this.lyricsEl.innerHTML = '';
+    this.progressFill.style.width = '0%';
+    this.progressText.textContent = '0 / 0';
+  }
+
+  handleStrike(id) {
+    if (this.state !== 'playing') return false;
+
+    const expected = this.notes[this.cursor];
+
+    if (id === expected) {
+      // Correct
+      this._clearHint();
+      this._flashTongue(id, 'tongue--success');
+      this.cursor++;
+
+      if (this.cursor >= this.notes.length) {
+        this._complete();
+      } else {
+        this._updateDisplay();
+        this._showHint();
+      }
+      return true;
+    } else {
+      // Wrong — flash red, stay on same note
+      this._flashTongue(id, 'tongue--wrong');
+      return true;
+    }
+  }
+
+  _showHint() {
+    if (this.cursor >= this.notes.length) return;
+    const targetId = this.notes[this.cursor];
+    const el = this.visual.tongueEls[targetId];
+    if (el) {
+      el.classList.remove('tongue--active', 'tongue--success', 'tongue--wrong');
+      el.classList.add('tongue--hint');
+    }
+  }
+
+  _clearHint() {
+    // Remove hint from all tongues
+    this.visual.tongueEls.forEach(el => {
+      if (el) el.classList.remove('tongue--hint');
+    });
+  }
+
+  _flashTongue(id, cls) {
+    const el = this.visual.tongueEls[id];
+    if (!el) return;
+    el.classList.remove('tongue--hint', 'tongue--active', 'tongue--success', 'tongue--wrong');
+    void el.offsetWidth; // reflow to restart animation
+    el.classList.add(cls);
+    const duration = cls === 'tongue--wrong' ? 400 : 600;
+    setTimeout(() => el.classList.remove(cls), duration);
+  }
+
+  _updateDisplay() {
+    const total = this.notes.length;
+    const done = this.cursor;
+    this.progressText.textContent = `${done} / ${total}`;
+    this.progressFill.style.width = `${(done / total) * 100}%`;
+
+    // Note name + key hint
+    const targetId = this.notes[this.cursor];
+    const tongue = TONGUES.find(t => t.id === targetId);
+    if (tongue) {
+      this.noteDisplay.innerHTML =
+        `${tongue.note}<span class="learn-key-hint">key: ${tongue.key}</span>`;
+    }
+
+    // Active lyric line
+    const activeLine = this.lineMap[this.cursor];
+    this.lyricsEl.querySelectorAll('.lyric-line').forEach((el, i) => {
+      el.classList.remove('lyric-line--active', 'lyric-line--done');
+      if (i === activeLine) el.classList.add('lyric-line--active');
+      else if (i < activeLine) el.classList.add('lyric-line--done');
+    });
+  }
+
+  _complete() {
+    this.state = 'complete';
+    this.isActive = false;
+    this._clearHint();
+
+    this.progressText.textContent = `${this.notes.length} / ${this.notes.length}`;
+    this.progressFill.style.width = '100%';
+    this.noteDisplay.innerHTML = '';
+    this.noteSection.style.display = 'none';
+
+    // Mark all lyrics done
+    this.lyricsEl.querySelectorAll('.lyric-line').forEach(el => {
+      el.classList.remove('lyric-line--active');
+      el.classList.add('lyric-line--done');
+    });
+
+    // Show complete message
+    const msg = document.createElement('div');
+    msg.className = 'learn-complete';
+    msg.textContent = 'Well done!';
+    this.lyricsEl.parentElement.insertBefore(msg, this.lyricsEl);
+
+    this.startBtn.disabled = false;
+    this.resetBtn.disabled = false;
+
+    // Clean up message on next start/reset
+    const origStart = this.startBtn.onclick;
+    const cleanup = () => { if (msg.parentElement) msg.remove(); };
+    this.startBtn.addEventListener('click', cleanup, { once: true });
+    this.resetBtn.addEventListener('click', cleanup, { once: true });
+  }
+
+  _bindPanelToggle() {
+    const panel = document.getElementById('learn-panel');
+    const toggle = document.getElementById('learn-toggle');
+    const close = document.getElementById('learn-close');
+    const scrim = document.getElementById('learn-scrim');
+
+    const open = () => { panel.classList.add('open'); scrim.classList.add('open'); };
+    const shut = () => { panel.classList.remove('open'); scrim.classList.remove('open'); };
+
+    toggle.addEventListener('click', open);
+    close.addEventListener('click', shut);
+    scrim.addEventListener('click', shut);
+  }
+}
+
 // ── Init ────────────────────────────────────────────────────────────
 (function init() {
   const audio = new AudioEngine();
   const controls = new ControlPanel(audio);
   let visual = null;
   let input = null;
+  let learn = null;
 
   const overlay = document.getElementById('overlay');
 
   function handleStrike(id) {
+    if (learn && learn.isActive) {
+      if (learn.handleStrike(id)) {
+        audio.play(id);
+        return;
+      }
+    }
     audio.play(id);
     visual.strike(id);
   }
@@ -360,6 +586,7 @@ class ControlPanel {
     if (!visual) {
       visual = new VisualEngine();
       input = new InputHandler(handleStrike);
+      learn = new LearnEngine(visual);
     }
   }
 
