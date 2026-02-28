@@ -21,27 +21,27 @@ const PRESETS = {
   default: {
     harmonicity: 2.6, modulationIndex: 0.9, bloomCents: 8,
     attack: 35, decayScale: 0.8, modDecayRatio: 0.22,
-    reverbWet: 50, reverbDecay: 3.2, subLevel: -20, volume: 0,
+    reverbWet: 50, reverbDecay: 3.2, subLevel: -20, volume: 0, bgmVolume: -15,
   },
   handpan: {
     harmonicity: 5.1, modulationIndex: 0.6, bloomCents: 8,
     attack: 30, decayScale: 1.4, modDecayRatio: 0.18,
-    reverbWet: 55, reverbDecay: 5.5, subLevel: -18, volume: 0,
+    reverbWet: 55, reverbDecay: 5.5, subLevel: -18, volume: 0, bgmVolume: -15,
   },
   bell: {
     harmonicity: 7.0, modulationIndex: 2.2, bloomCents: 22,
     attack: 6, decayScale: 0.7, modDecayRatio: 0.55,
-    reverbWet: 60, reverbDecay: 5, subLevel: -26, volume: -2,
+    reverbWet: 60, reverbDecay: 5, subLevel: -26, volume: -2, bgmVolume: -15,
   },
   marimba: {
     harmonicity: 2.0, modulationIndex: 0.3, bloomCents: 3,
     attack: 5, decayScale: 0.4, modDecayRatio: 0.12,
-    reverbWet: 22, reverbDecay: 1.8, subLevel: -10, volume: 0,
+    reverbWet: 22, reverbDecay: 1.8, subLevel: -10, volume: 0, bgmVolume: -15,
   },
   deep: {
     harmonicity: 2.5, modulationIndex: 1.6, bloomCents: 15,
     attack: 45, decayScale: 1.6, modDecayRatio: 0.22,
-    reverbWet: 65, reverbDecay: 6.5, subLevel: -6, volume: -2,
+    reverbWet: 65, reverbDecay: 6.5, subLevel: -6, volume: -2, bgmVolume: -15,
   },
 };
 
@@ -72,6 +72,7 @@ const CONTROLS = {
   reverbDecay:     { toAudio: v => v,        fmt: v => `${parseFloat(v).toFixed(1)}s` },
   subLevel:        { toAudio: v => v,        fmt: v => `${Math.round(v)} dB` },
   volume:          { toAudio: v => v,        fmt: v => `${Math.round(v)} dB` },
+  bgmVolume:       { toAudio: v => v,        fmt: v => `${Math.round(v)} dB` },
 };
 
 // ── AudioEngine ─────────────────────────────────────────────────────
@@ -81,6 +82,7 @@ class AudioEngine {
     this.voices = [];
     this.reverb = null;
     this.compressor = null;
+    this.bgm = null;
 
     // Current audio-domain params (set via setParam)
     this.params = {
@@ -94,6 +96,7 @@ class AudioEngine {
       reverbDecay: 3.2,
       subLevel: -20,
       volume: 0,
+      bgmVolume: -15,
     };
   }
 
@@ -111,6 +114,14 @@ class AudioEngine {
     }).connect(this.reverb);
 
     Tone.Destination.volume.value = p.volume;
+
+    // BGM: looping Tetris theme, direct to destination (bypasses reverb/compressor)
+    this.bgm = new Tone.Player({
+      url: 'tetris-theme.mp3',
+      loop: true,
+      volume: p.bgmVolume,
+      onload: () => { this.bgm.start(); },
+    }).toDestination();
 
     TONGUES.forEach((t) => {
       const baseDecay = 2.0 + (1 - t.freq / 600) * 2.5;
@@ -196,6 +207,9 @@ class AudioEngine {
         break;
       case 'volume':
         Tone.Destination.volume.value = audioValue;
+        break;
+      case 'bgmVolume':
+        if (this.bgm) this.bgm.volume.value = audioValue;
         break;
       // bloomCents: read from params at play() time, no live update needed
     }
