@@ -80,6 +80,34 @@ const SONGS = {
       { lyric: 'How I wonder what you are',        notes: [5,5,0,0,2] },
     ],
   },
+  hotCrossBuns: {
+    title: 'Hot Cross Buns',
+    lines: [
+      { lyric: 'Hot cross buns',                    notes: [7,3,5] },
+      { lyric: 'Hot cross buns',                    notes: [7,3,5] },
+      { lyric: 'One a penny, two a penny',          notes: [5,5,5,5,3,3,3,3] },
+      { lyric: 'Hot cross buns',                    notes: [7,3,5] },
+    ],
+  },
+  maryLamb: {
+    title: 'Mary Had a Little Lamb',
+    lines: [
+      { lyric: 'Mary had a little lamb',            notes: [7,3,5,3,7,7,7] },
+      { lyric: 'Little lamb, little lamb',          notes: [3,3,3] },
+      { lyric: 'Little lamb',                       notes: [7,1,1] },
+      { lyric: 'Mary had a little lamb',            notes: [7,3,5,3,7,7,7,7] },
+      { lyric: 'Its fleece was white as snow',      notes: [3,3,7,3,5] },
+    ],
+  },
+  amazingGrace: {
+    title: 'Amazing Grace',
+    lines: [
+      { lyric: 'Amazing Grace, how sweet the sound', notes: [2,5,3,5,3,5,0,2] },
+      { lyric: 'That saved a wretch like me',        notes: [2,5,0,5,3,7] },
+      { lyric: 'I once was lost, but now am found',  notes: [7,3,5,3,5,0,2] },
+      { lyric: 'Was blind, but now I see',            notes: [2,5,0,5,2] },
+    ],
+  },
 };
 
 // Slider → audio conversion + display formatting
