@@ -81,6 +81,40 @@ const SONGS = {
       { lyric: 'How I wonder what you are',        notes: [2,2,6,6,3] },
     ],
   },
+
+  amazing_grace: {
+    title: 'Amazing Grace',
+    lines: [
+      { lyric: 'Amazing grace, how sweet the sound',   notes: [3,2,7,7,2,7,1] },
+      { lyric: 'That saved a wretch like me',           notes: [7,2,3,3,6,3] },
+      { lyric: 'I once was lost, but now am found',     notes: [3,2,7,7,2,7,1] },
+      { lyric: 'Was blind, but now I see',              notes: [0,1,7,7,2,3,6,3] },
+    ],
+  },
+
+  mary_lamb: {
+    title: 'Mary Had a Little Lamb',
+    lines: [
+      { lyric: 'Mary had a little lamb',               notes: [2,6,3,6,2,2,2] },
+      { lyric: 'Little lamb, little lamb',              notes: [6,6,6,2,7,7] },
+      { lyric: 'Mary had a little lamb',               notes: [2,6,3,6,2,2,2] },
+      { lyric: 'Its fleece was white as snow',          notes: [2,6,6,2,6,3] },
+    ],
+  },
+
+  auld_lang_syne: {
+    title: 'Auld Lang Syne',
+    lines: [
+      { lyric: 'Should old acquaintance be forgot',     notes: [3,2,2,2,7,2,7,1] },
+      { lyric: 'And never brought to mind',             notes: [7,2,2,7,1,0] },
+      { lyric: 'Should old acquaintance be forgot',     notes: [1,0,0,1,7,2,7,1] },
+      { lyric: 'And days of auld lang syne',            notes: [7,2,2,6,3] },
+      { lyric: 'For auld lang syne, my dear',           notes: [7,0,0,1,7,2,7,1] },
+      { lyric: 'For auld lang syne',                    notes: [7,2,2,6,3] },
+      { lyric: 'We\'ll take a cup of kindness yet',     notes: [7,0,0,1,7,2,7,1] },
+      { lyric: 'For auld lang syne',                    notes: [7,2,2,6,3] },
+    ],
+  },
 };
 
 // Slider → audio conversion + display formatting
