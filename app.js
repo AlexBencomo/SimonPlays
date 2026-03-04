@@ -15,22 +15,21 @@
 //   F#4 = 363.27 Hz    A4  = 432.00 Hz
 //   B4  = 484.90 Hz    D5  = 576.65 Hz
 //
-// Physical tongue layout (viewed from above, "Sonic Energy" text facing you):
-//   Top row (small tongues, higher pitch):   D5 (center), B4 (right), A4 (left)
-//   Bottom row (large tongues, lower pitch): A3 (center), B3 (left),  D4 (right)
-//   Side tongues (medium):                   E4 (left),   F#4 (right)
+// Physical tongue layout (clock positions, viewed from above):
+//   12:00 = E4    1:30 = D5    3:00 = D4    4:30 = A4
+//    6:00 = A3    7:30 = Gb4   9:00 = B3   10:30 = B4
 // ─────────────────────────────────────────────────────────────────────
 
 // ── Tongue layout ───────────────────────────────────────────────────
 const TONGUES = [
-  { id: 0, note: 'D5',  freq: 576.65, angle: 0,   key: '8' },
-  { id: 1, note: 'B4',  freq: 484.90, angle: 45,  key: '9' },
-  { id: 2, note: 'F#4', freq: 363.27, angle: 90,  key: '6' },
-  { id: 3, note: 'D4',  freq: 288.33, angle: 135, key: '3' },
+  { id: 0, note: 'E4',  freq: 323.63, angle: 0,   key: '8' },
+  { id: 1, note: 'D5',  freq: 576.65, angle: 45,  key: '9' },
+  { id: 2, note: 'D4',  freq: 288.33, angle: 90,  key: '6' },
+  { id: 3, note: 'A4',  freq: 432.00, angle: 135, key: '3' },
   { id: 4, note: 'A3',  freq: 216.00, angle: 180, key: '2' },
-  { id: 5, note: 'B3',  freq: 242.45, angle: 225, key: '1' },
-  { id: 6, note: 'E4',  freq: 323.63, angle: 270, key: '4' },
-  { id: 7, note: 'A4',  freq: 432.00, angle: 315, key: '7' },
+  { id: 5, note: 'Gb4', freq: 363.27, angle: 225, key: '1' },
+  { id: 6, note: 'B3',  freq: 242.45, angle: 270, key: '4' },
+  { id: 7, note: 'B4',  freq: 484.90, angle: 315, key: '7' },
 ];
 
 const KEY_MAP = {};
@@ -44,27 +43,27 @@ const PRESETS = {
   default: {
     harmonicity: 2.6, modulationIndex: 0.9, bloomCents: 8,
     attack: 35, decayScale: 0.8, modDecayRatio: 0.22,
-    reverbWet: 50, reverbDecay: 3.2, subLevel: -20, volume: 0, bgmVolume: -15,
+    reverbWet: 50, reverbDecay: 3.2, subLevel: -20, volume: 0,
   },
   handpan: {
     harmonicity: 5.1, modulationIndex: 0.6, bloomCents: 8,
     attack: 30, decayScale: 1.4, modDecayRatio: 0.18,
-    reverbWet: 55, reverbDecay: 5.5, subLevel: -18, volume: 0, bgmVolume: -15,
+    reverbWet: 55, reverbDecay: 5.5, subLevel: -18, volume: 0,
   },
   bell: {
     harmonicity: 7.0, modulationIndex: 2.2, bloomCents: 22,
     attack: 6, decayScale: 0.7, modDecayRatio: 0.55,
-    reverbWet: 60, reverbDecay: 5, subLevel: -26, volume: -2, bgmVolume: -15,
+    reverbWet: 60, reverbDecay: 5, subLevel: -26, volume: -2,
   },
   marimba: {
     harmonicity: 2.0, modulationIndex: 0.3, bloomCents: 3,
     attack: 5, decayScale: 0.4, modDecayRatio: 0.12,
-    reverbWet: 22, reverbDecay: 1.8, subLevel: -10, volume: 0, bgmVolume: -15,
+    reverbWet: 22, reverbDecay: 1.8, subLevel: -10, volume: 0,
   },
   deep: {
     harmonicity: 2.5, modulationIndex: 1.6, bloomCents: 15,
     attack: 45, decayScale: 1.6, modDecayRatio: 0.22,
-    reverbWet: 65, reverbDecay: 6.5, subLevel: -6, volume: -2, bgmVolume: -15,
+    reverbWet: 65, reverbDecay: 6.5, subLevel: -6, volume: -2,
   },
 };
 
@@ -73,12 +72,12 @@ const SONGS = {
   twinkle: {
     title: 'Twinkle Twinkle Little Star',
     lines: [
-      { lyric: 'Twinkle, twinkle, little star',  notes: [3,3,7,7,1,1,7] },
-      { lyric: 'How I wonder what you are',       notes: [2,2,6,6,3] },
-      { lyric: 'Up above the world so high',      notes: [7,7,2,2,6] },
-      { lyric: 'Like a diamond in the sky',        notes: [7,7,2,2,6] },
-      { lyric: 'Twinkle, twinkle, little star',   notes: [3,3,7,7,1,1,7] },
-      { lyric: 'How I wonder what you are',        notes: [2,2,6,6,3] },
+      { lyric: 'Twinkle, twinkle, little star',  notes: [2,2,3,3,7,7,3] },
+      { lyric: 'How I wonder what you are',       notes: [5,5,0,0,2] },
+      { lyric: 'Up above the world so high',      notes: [3,3,5,5,0] },
+      { lyric: 'Like a diamond in the sky',        notes: [3,3,5,5,0] },
+      { lyric: 'Twinkle, twinkle, little star',   notes: [2,2,3,3,7,7,3] },
+      { lyric: 'How I wonder what you are',        notes: [5,5,0,0,2] },
     ],
   },
 };
@@ -95,7 +94,6 @@ const CONTROLS = {
   reverbDecay:     { toAudio: v => v,        fmt: v => `${parseFloat(v).toFixed(1)}s` },
   subLevel:        { toAudio: v => v,        fmt: v => `${Math.round(v)} dB` },
   volume:          { toAudio: v => v,        fmt: v => `${Math.round(v)} dB` },
-  bgmVolume:       { toAudio: v => v,        fmt: v => `${Math.round(v)} dB` },
 };
 
 // ── AudioEngine ─────────────────────────────────────────────────────
@@ -105,7 +103,6 @@ class AudioEngine {
     this.voices = [];
     this.reverb = null;
     this.compressor = null;
-    this.bgm = null;
 
     // Current audio-domain params (set via setParam)
     this.params = {
@@ -119,7 +116,6 @@ class AudioEngine {
       reverbDecay: 3.2,
       subLevel: -20,
       volume: 0,
-      bgmVolume: -15,
     };
   }
 
@@ -137,14 +133,6 @@ class AudioEngine {
     }).connect(this.reverb);
 
     Tone.Destination.volume.value = p.volume;
-
-    // BGM: looping Tetris theme, direct to destination (bypasses reverb/compressor)
-    this.bgm = new Tone.Player({
-      url: 'tetris-theme.mp3',
-      loop: true,
-      volume: p.bgmVolume,
-      onload: () => { this.bgm.start(); },
-    }).toDestination();
 
     TONGUES.forEach((t) => {
       const baseDecay = 2.0 + (1 - t.freq / 600) * 2.5;
@@ -230,9 +218,6 @@ class AudioEngine {
         break;
       case 'volume':
         Tone.Destination.volume.value = audioValue;
-        break;
-      case 'bgmVolume':
-        if (this.bgm) this.bgm.volume.value = audioValue;
         break;
       // bloomCents: read from params at play() time, no live update needed
     }
