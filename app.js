@@ -1,3 +1,26 @@
+// ── Instrument Reference ────────────────────────────────────────────
+// Model:        Meinl Sonic Energy Compact Steel Tongue Drum
+// SKU:          CSTD1DG
+// Size:         10" / 28.8 cm diameter, 4.7" / 12 cm height
+// Key:          B Minor
+// Concert Pitch: A4 = 432 Hz
+// Notes:        A3, B3, D4, E4, F#4, A4, B4, D5
+// Material:     Upper shell: stainless steel, Lower shell: steel
+// Color:        Dark Green
+// Tongues:      8
+//
+// Reference frequencies (432 Hz tuning):
+//   A3  = 216.00 Hz    B3  = 242.45 Hz
+//   D4  = 288.33 Hz    E4  = 323.63 Hz
+//   F#4 = 363.27 Hz    A4  = 432.00 Hz
+//   B4  = 484.90 Hz    D5  = 576.65 Hz
+//
+// Physical tongue layout (viewed from above, "Sonic Energy" text facing you):
+//   Top row (small tongues, higher pitch):   D5 (center), B4 (right), A4 (left)
+//   Bottom row (large tongues, lower pitch): A3 (center), B3 (left),  D4 (right)
+//   Side tongues (medium):                   E4 (left),   F#4 (right)
+// ─────────────────────────────────────────────────────────────────────
+
 // ── Tongue layout ───────────────────────────────────────────────────
 const TONGUES = [
   { id: 0, note: 'D5',  freq: 576.65, angle: 0,   key: '8' },
